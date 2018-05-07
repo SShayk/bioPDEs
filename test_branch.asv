@@ -1,6 +1,6 @@
 dt = .001;          % timestep [ms]
 dx = .001;   % distance between nodes [cm]
-L  = .01      % length of  entire branch [cm]
+L  = .001      % length of  entire branch [cm]
 T  = .05;           % duration [ms]
 
 N = 1:2;    % junction indices (for one branch, there are 2 nodes - one at the start and one at the end)
@@ -20,7 +20,7 @@ E_Na    = 45;       % rest potential (Na+ channel) [mV]
 E_K     = -82;      % rest potential (K+ channel) [mV]
 E_L     = -59;      % rest potential (leak channel) [mV]
 rad     = .0238;    % axon radius [cm]
-rho     = .0354;    % electrical resistivity [(mV/uA)cm]
+rho     = .0354;    % electrical resistivity [(mV/uA)cm]5rr
 
 % v_star  = E_L;      % voltage [mV] (solution for U0(0))
 % tau_n = 2;          % n-gate time constant [ms]
@@ -52,8 +52,6 @@ t = 0:dt:T;            % timepoints [ms]
 % voltages at each node at each timepoint
 v = zeros(length(n), length(t));
 v(:,1) = Vr;      % starting voltage
-
-% boundary conditions
 v(1,:) = Vr;
 v(end,:) = Vr;
 
@@ -78,7 +76,9 @@ for i = (n(end-1)):(-1):2
     w = g_tot*E*dt - I_stim/(4*pi*sigma);
     if r(i),  w = w + v(r(i),tp-1)*(rad/(2*rho))*(dt/(2*dx^2)); end
     if fc(i), w = w + v(i,tp-1)*(Cm - 2*(rad/(2*rho))*(dt/(2*dx^2))-g_tot*dt/2); end
+%     else w = w + v(i,tp-1)*( - 2*(rad/(2*rho))*(dt/(2*dx^2))); end
     w = w + v(i,tp-1)*(Cm - 2*(rad/(2*rho))*(dt/(2*dx^2))-g_tot*dt/2);
+
     j = fc(i);
     while j 
         b(i) = b(i) - c(j)*a(j);
